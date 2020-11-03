@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    username: javadev
+    password: secret
+    hikari:
+      minimum-idle: 5

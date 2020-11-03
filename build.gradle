@@ -1,0 +1,48 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.4.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+group = 'lohika.javaclub'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('testcontainersVersion', "1.14.3")
+}
+
+dependencies {
+	implementation 'org.projectlombok:lombok:1.18.16'
+	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+	implementation 'org.postgresql:postgresql:42.2.18'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.0'
+
+	implementation 'org.testcontainers:testcontainers:1.15.0-rc2'
+	implementation 'org.testcontainers:jdbc:1.15.0-rc2'
+	implementation 'org.testcontainers:postgresql:1.15.0-rc2'
+	implementation 'org.testcontainers:mariadb:1.15.0-rc2'
+
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.flywaydb:flyway-core'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+	}
+}
+
+test {
+	useJUnitPlatform()
+}

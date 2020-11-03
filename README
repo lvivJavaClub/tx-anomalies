@@ -1,0 +1,42 @@
+Very simple web application to demonstrate different anomalies in transaction management with different
+isolation levels. <p>
+
+MariaDB - supports:
+- Dirty Read
+- Non-Repeatable Read
+
+How to Test:
+After initialization the test db in docker will contain single row of product
+id=1, price=2
+
+Get All Products:
+    http://localhost:8080/products
+
+Dirty Read Scenario:
+ * http://localhost:8080/anomalies/dirty-read/update?id=1&price=50&name=test
+ * http://localhost:8080/anomalies/dirty-read/get?id=1
+
+
+Non-Repeatable Read Scenario:
+ *  http://localhost:8080/anomalies/nonrepeatable-read/get?id=1
+      (response gets unblocked by second request)
+ *  http://localhost:8080/anomalies/nonrepeatable-read/twiceprice?id=1
+
+Phantom-read case:
+ 1. http://localhost:8080/anomalies/phantom-read/get?price=3
+ 2. http://localhost:8080/anomalies/phantom-read/twiceprice?id=2
+
+Lost Update:
+ 1. http://localhost:8080/anomalies/lost-update/save?id=1&price=5&name=Product_A
+    Starts Transaction T1, do some processing
+ 2. http://localhost:8080/anomalies/lost-update/save?id=1&price=50&name=Productaaaaa
+    Starts Transaction T2, update product
+ 3. T1 updates product with id=1 and overwrite value from T2
+
+Dirty Write:
+ 1. http://localhost:8080/anomalies/dirty-write/update?id=1&price=100&name=Product_A
+ 2. http://localhost:8080/anomalies/dirty-write/twice
+
+Write Skew:
+ 1. http://localhost:8080/anomalies/write-skew/update?id=3
+ 2. http://localhost:8080/anomalies/write-skew/update?id=2
