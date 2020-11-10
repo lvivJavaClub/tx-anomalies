@@ -12,6 +12,7 @@ public class ErrorController {
     @ResponseBody
     @ExceptionHandler
     public String onError(Exception e) {
+        log.error(e.getMessage(), e);
         return e.getMessage();
     }
 

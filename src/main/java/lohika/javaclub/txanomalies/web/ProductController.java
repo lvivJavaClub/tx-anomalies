@@ -1,5 +1,6 @@
 package lohika.javaclub.txanomalies.web;
 
+import lohika.javaclub.txanomalies.cases.RollbackCase;
 import lohika.javaclub.txanomalies.data.ProductRepository;
 import lohika.javaclub.txanomalies.model.Product;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductRepository productRepository;
+    private final RollbackCase rollbackCase;
 
     @GetMapping
     public List<Product> getAllProducts() {
@@ -24,6 +26,12 @@ public class ProductController {
     @GetMapping("/save")
     public Product createProduct(Product product) {
         return productRepository.saveAndFlush(product);
+    }
+
+    @GetMapping("/discount")
+    public List<Product> discount(Integer discount) {
+        rollbackCase.discount(getAllProducts(), discount);
+        return getAllProducts();
     }
 
 }
